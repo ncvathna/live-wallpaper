@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.IO;
 
 namespace Live_Wallpaper
 {
@@ -8,20 +9,25 @@ namespace Live_Wallpaper
     /// </summary>
     public partial class Settings : Window
     {
+        private string videoPath = (string) Properties.Settings.Default["VideoPath"];
         public Settings()
         {
             InitializeComponent();
             slVolume.Value = (double)Properties.Settings.Default["VideoVolume"];
-            txtPath.Text = (string)Properties.Settings.Default["VideoPath"];
+            txtPath.Text = Path.GetFileName(videoPath);
 
             btnChoose.Click += (o, e) =>
             {
                 System.Windows.Forms.OpenFileDialog fileDialog = new System.Windows.Forms.OpenFileDialog();
-                if (string.IsNullOrEmpty(txtPath.Text)) fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                else fileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(txtPath.Text);
+                if (string.IsNullOrEmpty(videoPath)) fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                else fileDialog.InitialDirectory = Path.GetDirectoryName(videoPath);
                 fileDialog.Filter = "MP4 videos | *.mp4";
                 fileDialog.Multiselect = false;
-                if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) txtPath.Text = fileDialog.FileName;
+                if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    videoPath = fileDialog.FileName;
+                    txtPath.Text = Path.GetFileName(videoPath);
+                }
             };
             btnCancel.Click += (o, e) =>
             {
@@ -30,12 +36,12 @@ namespace Live_Wallpaper
             };
             btnSave.Click += (o, e) =>
             {
-                if (txtPath.Text == "")
+                if (string.IsNullOrEmpty(videoPath))
                 {
                     MessageBox.Show("Please set a video path.");
                     return;
                 }
-                Properties.Settings.Default["VideoPath"] = txtPath.Text;
+                Properties.Settings.Default["VideoPath"] = videoPath;
                 Properties.Settings.Default["VideoVolume"] = slVolume.Value;
                 Properties.Settings.Default.Save();
                 this.DialogResult = true;
