@@ -17,6 +17,11 @@ namespace Live_Wallpaper
             txtPath.Text = Path.GetFileName(videoPath);
             chkStartup.IsChecked = (bool)Properties.Settings.Default["Startup"];
 
+            // lblVolume
+            lblVolume.Content = String.Format("{0:P0}", slVolume.Value);
+            slVolume.ValueChanged += (o, e) => lblVolume.Content = String.Format("{0:P0}", slVolume.Value);
+
+            // Choose Video File
             btnChoose.Click += (o, e) =>
             {
                 System.Windows.Forms.OpenFileDialog fileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -30,6 +35,7 @@ namespace Live_Wallpaper
                     txtPath.Text = Path.GetFileName(videoPath);
                 }
             };
+            // Closing Logic
             btnCancel.Click += (o, e) =>
             {
                 this.DialogResult = false;
