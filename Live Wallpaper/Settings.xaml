@@ -5,16 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Live_Wallpaper"
         mc:Ignorable="d"
-        Title="Setting" Height="150" Width="400" ResizeMode="NoResize">
+        Title="Setting" Height="220" Width="400" ResizeMode="NoResize">
     <Grid>
         <Label Content="Video:" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" Width="75"/>
         <TextBox x:Name="txtPath" HorizontalAlignment="Left" Height="23" Margin="89,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="0.343,-1.241" IsEnabled="False"/>
         <Label Content="Volume:" HorizontalAlignment="Left" Margin="9,41,0,0" VerticalAlignment="Top" Width="75"/>
-        <Slider x:Name="slVolume" HorizontalAlignment="Left" Margin="89,45,0,0" VerticalAlignment="Top" Width="205" Maximum="1" LargeChange="0.25" SmallChange="0.05" IsSnapToTickEnabled="True" TickFrequency="0.05"></Slider>
+        <Slider x:Name="slVolume" HorizontalAlignment="Left" Margin="89,45,0,0" VerticalAlignment="Top" Width="205" Maximum="1" LargeChange="0.25" SmallChange="0.05" IsSnapToTickEnabled="True" TickFrequency="0.05"/>
         <Button x:Name="btnChoose" Content="Choose" HorizontalAlignment="Left" Margin="294,10,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="294,79,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="214,79,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="294,150,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="214,150,0,0" VerticalAlignment="Top" Width="75"/>
         <Label Content="{Binding ElementName=slVolume, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="294,41,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="chkStartup" Content="Enable Auto Startup" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="9,100,0,0" TextWrapping="Wrap" Text="Note: If you have moved the executable file, please run the application at the new location once to update auto startup." VerticalAlignment="Top" TextDecorations="{x:Null}" Width="360" Height="45" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
 
     </Grid>
 </Window>

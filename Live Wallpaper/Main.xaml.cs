@@ -9,6 +9,9 @@ namespace Live_Wallpaper
     /// </summary>
     public partial class Main : Window
     {
+        // Name of auto startup registry key's value
+        private const string KEY_NAME = "Live Wallpaper";
+
         public Main()
         {
             InitializeComponent();
@@ -48,6 +51,13 @@ namespace Live_Wallpaper
             ni.ContextMenu = new System.Windows.Forms.ContextMenu();
 
             System.Windows.Forms.MenuItem itemExit = new System.Windows.Forms.MenuItem("Exit", (o, e) => {
+                // Check Auto Startup
+                // Registry Key Value will be deleted when startup is disabled in order to prevent unused startup entry as this is a portable program.
+                Microsoft.Win32.RegistryKey startups = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                if ((bool)Properties.Settings.Default["Startup"]) startups.SetValue(KEY_NAME, "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
+                else startups.DeleteValue(KEY_NAME, false);
+
+                // Reset Wallpaper
                 string originalWallpaperPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper");
                 string tempPath = Path.Combine(Path.GetTempPath(), "original-wallpaper.jpg");
                 File.Copy(originalWallpaperPath, tempPath, true);

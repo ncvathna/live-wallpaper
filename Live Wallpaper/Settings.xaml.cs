@@ -15,6 +15,7 @@ namespace Live_Wallpaper
             InitializeComponent();
             slVolume.Value = (double)Properties.Settings.Default["VideoVolume"];
             txtPath.Text = Path.GetFileName(videoPath);
+            chkStartup.IsChecked = (bool)Properties.Settings.Default["Startup"];
 
             btnChoose.Click += (o, e) =>
             {
@@ -43,6 +44,7 @@ namespace Live_Wallpaper
                 }
                 Properties.Settings.Default["VideoPath"] = videoPath;
                 Properties.Settings.Default["VideoVolume"] = slVolume.Value;
+                Properties.Settings.Default["Startup"] = chkStartup.IsChecked;
                 Properties.Settings.Default.Save();
                 this.DialogResult = true;
                 this.Close();
