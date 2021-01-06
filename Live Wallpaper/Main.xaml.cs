@@ -15,6 +15,8 @@ namespace Live_Wallpaper
         public Main()
         {
             InitializeComponent();
+            // Upgrade Settings if Executable changed location
+
             // Initialize Video
             if (!File.Exists((string)Properties.Settings.Default["VideoPath"])) new Settings().ShowDialog();
             mediaElement.Volume = (double)Properties.Settings.Default["VideoVolume"];
