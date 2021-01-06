@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.IO;
 
 namespace Live_Wallpaper
 {
@@ -12,7 +13,7 @@ namespace Live_Wallpaper
         {
             InitializeComponent();
             // Initialize Video
-            if (!System.IO.File.Exists((string)Properties.Settings.Default["VideoPath"])) new Settings().ShowDialog();
+            if (!File.Exists((string)Properties.Settings.Default["VideoPath"])) new Settings().ShowDialog();
             mediaElement.Volume = (double)Properties.Settings.Default["VideoVolume"];
             mediaTimeline.Source = new Uri((string)Properties.Settings.Default["VideoPath"]);
 
@@ -47,12 +48,12 @@ namespace Live_Wallpaper
             ni.ContextMenu = new System.Windows.Forms.ContextMenu();
 
             System.Windows.Forms.MenuItem itemExit = new System.Windows.Forms.MenuItem("Exit", (o, e) => {
-                string originalWallpaperPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper");
-                string tempPath = System.IO.Path.Combine(Environment.CurrentDirectory, "original.jpg");
-                System.IO.File.Copy(originalWallpaperPath, tempPath, true);
+                string originalWallpaperPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper");
+                string tempPath = Path.Combine(Path.GetTempPath(), "original-wallpaper.jpg");
+                File.Copy(originalWallpaperPath, tempPath, true);
                 mediaTimeline.Source = new Uri(tempPath);
                 mediaElement.MediaOpened += (o2, e2) => {
-                    System.IO.File.Delete(tempPath);
+                    File.Delete(tempPath);
                     Application.Current.Shutdown();
                 };
                 mediaBoard.Begin();
