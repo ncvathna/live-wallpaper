@@ -16,7 +16,7 @@
         <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="214,150,0,0" VerticalAlignment="Top" Width="75"/>
         <Label Content="{Binding ElementName=slVolume, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="294,41,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="chkStartup" Content="Enable Auto Startup" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="9,100,0,0" TextWrapping="Wrap" Text="Note: If you have moved the executable file, please run the application at the new location again to update settings and auto startup." VerticalAlignment="Top" TextDecorations="{x:Null}" Width="360" Height="45" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="9,100,0,0" TextWrapping="Wrap" Text="Note: If you have moved the executable file, please run the application at the new location again to update settings and auto startup." VerticalAlignment="Top" TextDecorations="{x:Null}" Width="360" Height="50" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
 
     </Grid>
 </Window>
