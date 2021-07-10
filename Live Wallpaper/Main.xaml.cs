@@ -20,8 +20,14 @@ namespace Live_Wallpaper
             // Initialize Video
             if (!File.Exists((string)Properties.Settings.Default["VideoPath"])) new Settings().ShowDialog();
             mediaElement.Volume = (double)Properties.Settings.Default["VideoVolume"];
-            mediaTimeline.Source = new Uri((string)Properties.Settings.Default["VideoPath"]);
-
+            mediaElement.Source = new Uri((string)Properties.Settings.Default["VideoPath"]);
+            mediaElement.MediaEnded += (o, e) =>
+            {
+                mediaElement.Position = TimeSpan.Zero;
+                mediaElement.Play();
+            };
+            mediaElement.Play();
+            
             // Load - Get Handle and SetParent
             this.Loaded += (o, e) =>
             {
@@ -63,12 +69,13 @@ namespace Live_Wallpaper
                 string originalWallpaperPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper");
                 string tempPath = Path.Combine(Path.GetTempPath(), "original-wallpaper.jpg");
                 File.Copy(originalWallpaperPath, tempPath, true);
-                mediaTimeline.Source = new Uri(tempPath);
-                mediaElement.MediaOpened += (o2, e2) => {
+                mediaElement.Source = new Uri(tempPath);
+                mediaElement.MediaEnded += (o2, e2) =>
+                {
                     File.Delete(tempPath);
                     Application.Current.Shutdown();
                 };
-                mediaBoard.Begin();
+                mediaElement.Play();
             });
             System.Windows.Forms.MenuItem itemSetting = new System.Windows.Forms.MenuItem("Settings", (o, e) =>
             {
@@ -78,8 +85,8 @@ namespace Live_Wallpaper
                 {
                     string newVideoPath = (string)Properties.Settings.Default["VideoPath"];
                     mediaElement.Volume = (double)Properties.Settings.Default["VideoVolume"];
-                    mediaTimeline.Source = new Uri(newVideoPath);
-                    if (newVideoPath != currentVideoPath) mediaBoard.Begin();
+                    mediaElement.Source = new Uri(newVideoPath);
+                    if (newVideoPath != currentVideoPath) mediaElement.Play();
                 }
             });
             ni.ContextMenu.MenuItems.Add(itemSetting);
