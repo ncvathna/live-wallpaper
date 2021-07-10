@@ -15,8 +15,7 @@ namespace Live_Wallpaper
         public Main()
         {
             InitializeComponent();
-            // Upgrade Settings if Executable changed location
-
+            UpdateStartupRegistry();
             // Initialize Video
             if (!File.Exists((string)Properties.Settings.Default["VideoPath"])) new Settings().ShowDialog();
             mediaElement.Volume = (double)Properties.Settings.Default["VideoVolume"];
@@ -59,12 +58,6 @@ namespace Live_Wallpaper
             ni.ContextMenu = new System.Windows.Forms.ContextMenu();
 
             System.Windows.Forms.MenuItem itemExit = new System.Windows.Forms.MenuItem("Exit", (o, e) => {
-                // Check Auto Startup
-                // Registry Key Value will be deleted when startup is disabled in order to prevent unused startup entry as this is a portable program.
-                Microsoft.Win32.RegistryKey startups = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-                if ((bool)Properties.Settings.Default["Startup"]) startups.SetValue(KEY_NAME, "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
-                else startups.DeleteValue(KEY_NAME, false);
-
                 // Reset Wallpaper
                 string originalWallpaperPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper");
                 string tempPath = Path.Combine(Path.GetTempPath(), "original-wallpaper.jpg");
@@ -85,12 +78,24 @@ namespace Live_Wallpaper
                 {
                     string newVideoPath = (string)Properties.Settings.Default["VideoPath"];
                     mediaElement.Volume = (double)Properties.Settings.Default["VideoVolume"];
-                    mediaElement.Source = new Uri(newVideoPath);
-                    if (newVideoPath != currentVideoPath) mediaElement.Play();
+                    if (newVideoPath != currentVideoPath)
+                    {
+                        mediaElement.Source = new Uri(newVideoPath);
+                        mediaElement.Play();
+                    }
+                    UpdateStartupRegistry();
                 }
             });
             ni.ContextMenu.MenuItems.Add(itemSetting);
             ni.ContextMenu.MenuItems.Add(itemExit);
+        }
+
+        private void UpdateStartupRegistry()
+        {
+            // Registry Key Value will be deleted when startup is disabled in order to prevent unused startup entry as this is a portable program.
+            Microsoft.Win32.RegistryKey startups = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if ((bool)Properties.Settings.Default["Startup"]) startups.SetValue(KEY_NAME, "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
+            else startups.DeleteValue(KEY_NAME, false);
         }
     }
 }
